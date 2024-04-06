@@ -1,0 +1,113 @@
+body{
+  overflow-x: hidden;
+  overflow-y:auto;
+}
+.add-product-form{
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    justify-content: center;
+    padding: 2em 2em 2em;
+    border: 1px solid rgb(226, 226, 226);
+    border-radius: 20px;
+    width: 70%;
+    max-width: 70em;
+    margin: 40px 0px 40px 90px;
+    box-shadow: 3px 8px 16px rgba(0,0,0,0.19), 0 1px 6px rgba(0,0,0,0.23);
+}
+
+.add-product-form h1{
+  margin: 0.2em 0 1em 0;
+}
+
+.add-product-form-left {
+    flex: 1;
+    float: left;
+    width: 40%;
+    margin-right: 20px;
+  }
+  #image{
+    text-align: center;
+    padding-left: 74px;
+  }
+
+  .add-product-form-right {
+    float: left;
+    width: 50%;
+  }
+  
+  .add-product-form-right label {
+    display: flex;
+    margin-bottom: 6px; 
+    font-size: 18px;
+  }
+  
+  .add-product-form-right input,
+  .add-product-form-right textarea {
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid rgb(50, 50, 50);
+    resize: none;
+    outline: none;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .add-product-form-right textarea {
+    height: 135px;
+  }
+
+  .add-product-form-right-2{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+  }
+  
+  .add-product-form-right-2 label{
+    align-self: center;
+    margin-right: 3%;
+  }
+
+  .add-product-form-right-2 input[type="number"]{
+    width: 35%;
+    margin-right: 3%;
+  }
+
+  .submit-button{
+    display: flex;
+    text-align: center;
+  }
+  .add-product-form button {
+    margin-right: auto;
+    margin-left: auto;
+    padding: 10px 20px;
+    background-color: #2e2e2e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in;
+  }
+  
+  .add-product-form button:hover {
+    background-color: #0D6EFD;
+  }
+
+  .add-product-form img{
+    height: auto;
+    width: 350px !important;
+    background-color: #e0e0e0;
+    outline: 2px solid rgb(211, 211, 211);;
+    border-radius: 15px;
+    margin-left: 1em;
+    margin-bottom: 1em;
+    padding:8px
+
+  }
+
+  .error{
+    margin-bottom: 20px;
+    color: red;
+  }
