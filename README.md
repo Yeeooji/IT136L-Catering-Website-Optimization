@@ -1,0 +1,16 @@
+- Sprint Plan
+	- 3 Sprints
+	- Testing
+		- Use Case Test
+		- Test Breakdown
+			- Black Box
+			- White Box
+	- PPT Slides
+- Main Issues
+	- UI Colors
+	- No Archive
+	- Obscure Login Admin
+	- No Sort
+	
+- Rule of 3s
+	- UI/UX Concept
