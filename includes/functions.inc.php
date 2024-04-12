@@ -478,7 +478,6 @@ function updateOrderInfo($conn, $orderId, $cxName, $eventDate, $eventTime, $cont
 
 }
 
-
 function emptyPkgInput($pax) {
     $result;
     if (empty($pax)) {
@@ -512,4 +511,5 @@ function formatTimestamp($dateString) {
     $time12hr = date('h:i A', $timestamp); 
 
     return array($month, $day, $year, $time12hr);
+
 }
