@@ -1,5 +1,6 @@
 <?php
 	include_once 'header.php';
+	require_once '../../includes/functions.inc.php';
 	require_once '../../includes/database.inc.php';
 ?>
 	<main>
@@ -8,11 +9,11 @@
 			<h1 class="p-2 bd-highlight mr-5">Menu</h1>
 			<div class="p-2 dropdown bd-highlight col-2">
 			<form action="menu.php" method="get" id="sortDescForm">
-					 <!-- Handles sorting option -->
+					 <!-- Handles SORTING option -->
 					<select class="form-select form-select-sm" onchange="submitSortForm(this)">
 					<?php
 						// Pagination variables
-						$results_per_page = 9; // Number of messages to display per page
+						$results_per_page = 9; 
 						$current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 						$start_index = ($current_page - 1) * $results_per_page;
 
@@ -49,7 +50,7 @@
 					<?php
 						if(isset($_GET['sort'])){
 							$sortValue = $_GET['sort'];
-							if($sortValue == 3){
+							if($sortValue ==3){
 								echo "<option value='0'>Sort by: Descending</option>";
 								echo "<option selected name='sort' value='3'>Name</option>";
 								echo "<option name='sort' value='4'>Price</option>";
@@ -140,26 +141,50 @@
 				else if (isset($_GET['sort'])){
 					$sortValue = $_GET['sort'];
 					if($sortValue == 1){
-						$sql = "SELECT * FROM products ORDER BY prodName AND prodStatus='active' ASC LIMIT $start_index, $results_per_page";
+						$sql = "SELECT * FROM products WHERE prodStatus='active' ORDER BY prodName ASC LIMIT $start_index, $results_per_page";
 					}
 					elseif($sortValue == 2){
-						$sql = "SELECT * FROM products ORDER BY prodPrice AND prodStatus='active' ASC LIMIT $start_index, $results_per_page";
+						$sql = "SELECT * FROM products WHERE prodStatus='active' ORDER BY prodPrice ASC LIMIT $start_index, $results_per_page";
 					}
 					elseif($sortValue == 3){
-						$sql = "SELECT * FROM products ORDER BY prodName AND prodStatus='active' DESC LIMIT $start_index, $results_per_page";
+						$sql = "SELECT * FROM products WHERE prodStatus='active' ORDER BY prodName DESC LIMIT $start_index, $results_per_page";
 					}
 					elseif($sortValue == 4){
-						$sql = "SELECT * FROM products ORDER BY prodPrice AND prodStatus='active' DESC LIMIT $start_index, $results_per_page";
+						$sql = "SELECT * FROM products WHERE prodStatus='active' ORDER BY prodPrice DESC LIMIT $start_index, $results_per_page";
 					}
 					else{
 						// Retrieve product data from the database
 						$sql = "SELECT * FROM products AND prodStatus='active' LIMIT $start_index, $results_per_page";
 					}
 				}
+				// Handles the sorting process based on product info with pages
+				else if (isset($_GET['sort']) && (isset($_GET['page']))){
+					$sortValue = $_GET['sort'];
+					if($sortValue == 1){
+						$sql = "SELECT * FROM products WHERE prodStatus='active' ORDER BY prodName ASC LIMIT $start_index, $results_per_page";
+					}
+					elseif($sortValue == 2){
+						$sql = "SELECT * FROM products WHERE prodStatus='active' ORDER BY prodPrice ASC LIMIT $start_index, $results_per_page";
+					}
+					elseif($sortValue == 3){
+						$sql = "SELECT * FROM products WHERE prodStatus='active' ORDER BY prodName DESC LIMIT $start_index, $results_per_page";
+					}
+					elseif($sortValue == 4){
+						$sql = "SELECT * FROM products WHERE prodStatus='active' ORDER BY prodPrice DESC LIMIT $start_index, $results_per_page";
+					}
+					else{
+						// Retrieve product data from the database
+						$sql = "SELECT * FROM products AND prodStatus='active' LIMIT $start_index, $results_per_page";
+					}
+				}
+				
 				// Retrieves all products based on category
 				else if(isset($_GET['category'])){
-					if(($_GET['category']) == ""){
+					if((empty($_GET['category']))){
 						$sql = "SELECT * FROM products WHERE prodStatus='active' LIMIT $start_index, $results_per_page";
+						// $url = "menu.php?category="; // the URL with an empty get
+						// $path = parse_url($url, PHP_URL_PATH); // the path of the URL without the query string
+						// header("Location: $path"); // redirect the user to the path
 					}
 					else{
 						$category = $_GET['category'];
@@ -358,30 +383,46 @@
 				// mysqli_close($conn);
 			?>
 		</div>
-
 		  <!-- Pagination -->
 		  <ul class="pagination">
-			<?php
-			// Calculate the total number of pages
-			$sql_count = "SELECT COUNT(*) AS total FROM products;";
-			$result_count = mysqli_query($conn, $sql_count);
-			if (!$result_count) {
-				die("Error: " . mysqli_error($conn)); 
-			}    
+		  <?php
 
-			$row_count = mysqli_fetch_assoc($result_count);
-			$total_pages = ceil($row_count['total'] / $results_per_page);
+				// Calculate the total number of pages
+				$sql_count = "SELECT COUNT(*) AS total FROM products WHERE prodStatus='active';";
+				if(isset($_GET['category'])){
+					$category = $_GET['category'];
+					$sql_count = "SELECT COUNT(*) AS total FROM products WHERE prodCat='$category' AND prodStatus='active';";
+				}
+				if(empty($_GET['category'])){
+					$sql_count = "SELECT COUNT(*) AS total FROM products WHERE prodStatus='active';";
+				}
 
-			// Display pagination links
-			for ($i = 1; $i <= $total_pages; $i++) {
-			echo "<li class='page-item" . ($i == $current_page ? ' active' : '') . "'>";
-			echo "<a class='page-link' href='?page=$i'>$i</a>";
-			echo "</li>";
-			}
-			mysqli_close($conn);
+				$result_count = mysqli_query($conn, $sql_count);
+				
+				// Error handler: If no results is found.
+				if(!$result_count) {
+					die("Error: " . mysqli_error($conn)); 
+				}   
+
+				$row_count = mysqli_fetch_assoc($result_count);
+				$total_pages = ceil($row_count['total'] / $results_per_page);
+
+				// Get the sorting parameter if it exists
+				$sortParam = isset($_GET['sort']) ? '&sort=' . $_GET['sort'] : '';
+
+				// Hide pagination if total pages is only 1.
+				if($total_pages != 1){
+					// Display pagination links with sorting parameter
+					for($i = 1; $i <= $total_pages; $i++) {
+						echo "<li class='page-item" . ($i == $current_page ? ' active' : '') . "'>";
+						echo "<a class='page-link' href='?page=$i$sortParam'>$i</a>";
+						echo "</li>";
+					}
+				}
+				mysqli_close($conn);	
 			?>
-		</ul>
 
+			</ul>
 	</div>	
 	</form>
 	</main>

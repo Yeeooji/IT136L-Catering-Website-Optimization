@@ -83,6 +83,7 @@ document.getElementById("clearPackageBtn").addEventListener("click", function() 
   location.reload();
 });
 
+// Sort menu function
 function submitSortForm(selectOption) {
   const selectedValue = selectOption.value;
   const previousPageURL = document.referrer;
@@ -90,13 +91,23 @@ function submitSortForm(selectOption) {
   let parameter;
   const urlSearchParams = new URLSearchParams(window.location.search);
   const category = urlSearchParams.get('category');
+  const page = urlSearchParams.get('page');
 
+
+  if(page == "" || page == "null" || page == null){
+    console.log("Null page")
+    if (selectedValue == 0) {
+      parameter = "";
+    } else {
+      parameter = "?page=" + page;
+    }
+  }
   if(category == "" || category == "null" || category == null){
     console.log("Null category")
     if (selectedValue == 0) {
       parameter = "";
     } else {
-      parameter = "?sort=" + selectedValue;
+      parameter = "?sort=" + selectedValue;  
     }
   }
   else{
@@ -107,6 +118,8 @@ function submitSortForm(selectOption) {
       parameter = "?category=" + category + "&sort=" + selectedValue;
     }
   }
+
+// End of sort menu function
   
   fetch(url)
     .then(response => {
