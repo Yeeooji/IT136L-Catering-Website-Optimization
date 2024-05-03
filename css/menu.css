@@ -68,18 +68,18 @@
     letter-spacing: 1px;
     margin-top: 1.25rem;
     font-weight: 500;
-    color: #282828;
-    background-color: white;
-    border: 2px transparent solid;
+    color:white;
+    background-color: #4d4d4d;
+    border: 2px white solid;
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease-in-out;
 
   }
   .detail-btn:hover{
-    background-color: #4d4d4d;
-    border: 2px white solid;
-    color: white;
+    background-color: white;
+    border: 2px transparent solid;
+    color: #4d4d4d;
     font-weight: bold;
   }
 
